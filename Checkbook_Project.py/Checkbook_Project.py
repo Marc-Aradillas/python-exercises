@@ -6,16 +6,17 @@ import os
 def view_balance(checkbook_data):
      current_balance = checkbook_data['balance']
      print('\nCurrent balance:', current_balance)
+     return current_balance
 
-#make withdrawals, and make deposits
+# make withdrawals, and make deposits
 def withdrawal(bal):
      amount = float(input('How much is the withdrawal? '))
      bal -= amount
-     print('\nWithdrawal sucessful') 
+     print('\nWithdrawal sucessful!') 
      return bal
 
 def deposit(dep):
-        amount = float(input("How much is the deposit?"))
+        amount = float(input("How much is the deposit? "))
         dep += amount
         print('\nDeposit successful!')
         return dep
@@ -23,13 +24,13 @@ def deposit(dep):
 # defined json file with a checkbook_file
 checkbook_file = 'checkbook.json'
 
-#check if file exists using os library
+# check if file exists using os library
 if os.path.exists(checkbook_file):
     print('File exists!')
-#otherwise, set balance to 0
+# otherwise, set balance to 0
 else:
     with open (checkbook_file, 'w') as f:
-        checkbook_data = {'balance': 0.0}
+        checkbook_data = [{'balance': 0.0}]
         json.dump(checkbook_data, f) 
 
 with open (checkbook_file, 'r') as f:
@@ -46,7 +47,7 @@ balance = balance.replace(',', '')
 balance = int(balance)
     
 while True:
-    #ask for user input
+    # ask for user input
     print('\n~~~ Welcome to your terminal checkbook! ~~~\n\n')
     print('----------------------------------')
     print('1.) view current balance\n')
@@ -63,17 +64,18 @@ while True:
 
     elif option == "2":
          balance = withdrawal(balance)
+         checkbook_data['balance'] = balance
 
     elif option == "3":
-         balance = deposit(checkbook_data)
+         balance = deposit(balance)
+         checkbook_data['balance'] = balance
     
     elif option == "4":
+         print('Thank you!, goodbye!')
          break
     
     else:
          print('invalid option, please try again')
-
-checkbook_data['balance'] = balance
 
 with open (checkbook_file, 'w') as f:
     json.dump(checkbook_data, f)
